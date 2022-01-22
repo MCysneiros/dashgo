@@ -1,10 +1,10 @@
-import { Box, Flex, SimpleGrid, Text, theme } from '@chakra-ui/react'
-import { Header } from '../components/Header/index'
+import { Box, Flex, SimpleGrid, Text, theme } from '@chakra-ui/react';
+import { Header } from '../components/Header/index';
 
-import dynamic from 'next/dynamic'
-import { Sidebar } from '../components/SideBar'
+import dynamic from 'next/dynamic';
+import { Sidebar } from '../components/SideBar';
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const options = {
 	chart: {
@@ -56,13 +56,13 @@ const options = {
 			opacityTo: 0.3,
 		},
 	},
-}
+};
 const series = [
 	{
 		name: 'series-1',
 		data: [31, 120, 10, 28, 91, 1, 69],
 	},
-]
+];
 
 export default function Dashboard() {
 	return (
@@ -71,7 +71,7 @@ export default function Dashboard() {
 			<Flex width='100%' my='6' maxWidth={1480} mx='auto' px='6'>
 				<Sidebar />
 				<SimpleGrid flex='1' gap='4' minChildWidth='320px' align='flex-start'>
-					<Box p='8' bg='gray.800' borderRadius={8} pb='4'>
+					<Box p={['6', '8']} bg='gray.800' borderRadius={8} pb='4'>
 						<Text fontSize='lg' mb='4'>
 							Inscritos da semana
 						</Text>
@@ -86,5 +86,5 @@ export default function Dashboard() {
 				</SimpleGrid>
 			</Flex>
 		</Flex>
-	)
+	);
 }
