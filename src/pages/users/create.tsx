@@ -9,13 +9,13 @@ import {
 	VStack,
 } from '@chakra-ui/react'
 import { Input } from '../../components/Form/input'
-import * as Header from '../../components/Header'
-import { Sidebar } from '../../components/Sidebar'
+import { Header } from '../../components/Header/index'
+import { Sidebar } from '../../components/SideBar'
 
 export default function CreateUser() {
 	return (
 		<Box>
-			<Header.Header />
+			<Header />
 			<Flex width='100%' my='6' maxWidth={1480} mx='auto' px='6'>
 				<Sidebar />
 				<Box flex='1' borderRadius={8} bg='gray.800' p='8'>
