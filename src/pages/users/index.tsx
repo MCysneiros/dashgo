@@ -5,6 +5,7 @@ import {
 	Flex,
 	Heading,
 	Icon,
+	Spinner,
 	Table,
 	Tbody,
 	Td,
@@ -19,9 +20,17 @@ import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/SideBar';
 import { Pagination } from '../../components/Pagination/index';
 import Link from 'next/link';
+import { useUsers } from '../../services/hooks/useUsers';
+import { useState } from 'react';
 
 export default function UserList() {
+	const [page, setPage] = useState(1);
+
+	const { data, isLoading, error, isFetching } = useUsers(page);
+
 	const isWideVersion = useBreakpointValue({ base: false, lg: true });
+
+	console.log(page);
 	return (
 		<Box>
 			<Header />
@@ -31,6 +40,9 @@ export default function UserList() {
 					<Flex mb='8' justify='space-between'>
 						<Heading size='lg' fontWeight='normal'>
 							Usuários
+							{!isLoading && isFetching && (
+								<Spinner size='sm' color='gray.500' ml='4' />
+							)}
 						</Heading>
 						<Link href='/users/create' passHref>
 							<Button
@@ -43,48 +55,66 @@ export default function UserList() {
 							</Button>
 						</Link>
 					</Flex>
-					<Table colorScheme='whiteAlpha'>
-						<Thead>
-							<Tr>
-								<Th px={['4', '4', '6']} color='gray.300' width='8'>
-									<Checkbox colorScheme='pink' />
-								</Th>
-								<Th>Usuário</Th>
-								{isWideVersion && <Th>Data de cadastro</Th>}
-								{isWideVersion && <Th width='8'></Th>}
-							</Tr>
-						</Thead>
-						<Tbody>
-							<Tr>
-								<Td px={['4', '4', '6']}>
-									<Checkbox colorScheme='pink' />
-								</Td>
-								<Td>
-									<Box>
-										<Text fontWeight='bold'>Matheus Cysneiros</Text>
-										<Text fontSize='sm' color='gray.300'>
-											msocys@gmail.com
-										</Text>
-									</Box>
-								</Td>
-								{isWideVersion && <Td>20 de Abril de 2021</Td>}
+					{isLoading ? (
+						<Flex justify='center'>
+							<Spinner />
+						</Flex>
+					) : error ? (
+						<Flex justify='center'>
+							<Text>Falha ao obter os dados dos usuários</Text>
+						</Flex>
+					) : (
+						<>
+							<Table colorScheme='whiteAlpha'>
+								<Thead>
+									<Tr>
+										<Th px={['4', '4', '6']} color='gray.300' width='8'>
+											<Checkbox colorScheme='pink' />
+										</Th>
+										<Th>Usuário</Th>
+										{isWideVersion && <Th>Data de cadastro</Th>}
+										{isWideVersion && <Th width='8'></Th>}
+									</Tr>
+								</Thead>
+								<Tbody>
+									{data.users.map(user => (
+										<Tr key={user.id}>
+											<Td px={['4', '4', '6']}>
+												<Checkbox colorScheme='pink' />
+											</Td>
+											<Td>
+												<Box>
+													<Text fontWeight='bold'>{user.name}</Text>
+													<Text fontSize='sm' color='gray.300'>
+														{user.email}
+													</Text>
+												</Box>
+											</Td>
+											{isWideVersion && <Td>{user.createdAt}</Td>}
 
-								{isWideVersion && (
-									<Td>
-										<Button
-											as='a'
-											size='sm'
-											fontSize='sm'
-											colorScheme='purple'
-											leftIcon={<Icon as={RiPencilLine} />}>
-											Editar
-										</Button>
-									</Td>
-								)}
-							</Tr>
-						</Tbody>
-					</Table>
-					<Pagination />
+											{isWideVersion && (
+												<Td>
+													<Button
+														as='a'
+														size='sm'
+														fontSize='sm'
+														colorScheme='purple'
+														leftIcon={<Icon as={RiPencilLine} />}>
+														Editar
+													</Button>
+												</Td>
+											)}
+										</Tr>
+									))}
+								</Tbody>
+							</Table>
+							<Pagination
+								totalCountOfRegisters={data.totalCount}
+								currentPage={page}
+								onPageChange={setPage}
+							/>
+						</>
+					)}
 				</Box>
 			</Flex>
 		</Box>
