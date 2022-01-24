@@ -14,7 +14,7 @@ export function SidebarNav() {
 				<NavLink href='/dashboard' icon={RiDashboardLine}>
 					Dashboard
 				</NavLink>
-				<NavLink href='/users ' icon={RiContactsLine}>
+				<NavLink href='/users' icon={RiContactsLine}>
 					Usuários
 				</NavLink>
 			</NavSection>
